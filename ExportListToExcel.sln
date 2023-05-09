@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33626.354
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportListToExcel.WebApi", "ExportListToExcel.WebApi\ExportListToExcel.WebApi.csproj", "{C869E6B5-71FB-4CBF-9666-90ADFB03AFC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExportListToExcel.WebApi", "ExportListToExcel.WebApi\ExportListToExcel.WebApi.csproj", "{C869E6B5-71FB-4CBF-9666-90ADFB03AFC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportQueryToExcelStream", "ExportQueryToExcelStream\ExportQueryToExcelStream.csproj", "{7C66D67D-6C81-456A-8964-45123EA7E698}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C869E6B5-71FB-4CBF-9666-90ADFB03AFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C869E6B5-71FB-4CBF-9666-90ADFB03AFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C869E6B5-71FB-4CBF-9666-90ADFB03AFC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C66D67D-6C81-456A-8964-45123EA7E698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C66D67D-6C81-456A-8964-45123EA7E698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C66D67D-6C81-456A-8964-45123EA7E698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C66D67D-6C81-456A-8964-45123EA7E698}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

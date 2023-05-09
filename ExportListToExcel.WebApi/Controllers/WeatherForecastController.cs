@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
+using ExportQueryToExcelStream;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.IO;
 
 namespace ExportListToExcel.WebApi.Controllers {
 
@@ -36,22 +38,9 @@ namespace ExportListToExcel.WebApi.Controllers {
         [Route("DownloadExcel")]
         public async Task<IActionResult> DownloadExcel()
         {
-            IQueryable queryable = Get().AsQueryable();
-            return ExportExcel(queryable);
-        }
-
-        #region Private Methods
-
-        private static FileStreamResult ExportExcel(IQueryable queryable)
-        {
-            var talbe = Convert2Datatable(queryable.AsQueryable());
-            using XLWorkbook wb = new();
-            wb.Worksheets.Add(talbe);
-            //Không cần sử dụng "using(MemoryStream stream = new())"
-            MemoryStream stream = new();
-            wb.SaveAs(stream);
-            stream.Position = 0;
-            var result = new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            //IQueryable queryable = ;
+            StreamExcelConverter converter = new(Get().AsQueryable());
+            var result = new FileStreamResult(converter.ToExcelStream(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             {
                 FileDownloadName = "MyFileName.xlsx"
             };
@@ -59,52 +48,71 @@ namespace ExportListToExcel.WebApi.Controllers {
             return result;
         }
 
-        private static DataTable Convert2Datatable(IQueryable query)
-        {
-            if (query != null)
-            {
-                DataTable dt = new(query.ElementType.Name);
-                var columns = GetProperties(query.ElementType);
-                dt.Columns.AddRange(ToDataColumn(columns));
-                foreach (var item in query)
-                {
-                    var row = new List<string>();
-                    //DataRow row2 = dt.NewRow();
-                    foreach (var column in columns)
-                    {
-                        var value = GetValue(item, column);
-                        row.Add(value != null ? value.ToString() : "null");
-                    }
-                    dt.Rows.Add(row.ToArray());
-                }
-                return dt;
-            }
-            return new DataTable("NotFound");
-        }
+        //#region Private Methods
 
-        private static DataColumn[] ToDataColumn(IEnumerable<string> columns)
-        {
-            var dataCol = new List<DataColumn>();
-            foreach (var column in columns)
-                dataCol.Add(new DataColumn(column));
-            return dataCol.ToArray();
-        }
+        //private static FileStreamResult ExportExcel(IQueryable queryable)
+        //{
+        //    var talbe = Convert2Datatable(queryable.AsQueryable());
+        //    using XLWorkbook wb = new();
+        //    wb.Worksheets.Add(talbe);
+        //    //Không cần sử dụng "using(MemoryStream stream = new())"
+        //    MemoryStream stream = new();
+        //    wb.SaveAs(stream);
+        //    stream.Position = 0;
+        //    var result = new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        //    {
+        //        FileDownloadName = "MyFileName.xlsx"
+        //    };
 
-        private static object GetValue(object item, string column)
-        {
-            return item.GetType()?.GetProperty(column)?.GetValue(item) ?? "Null";
-        }
+        //    return result;
+        //}
 
-        /// <summary>
-        /// Get fileds name
-        /// </summary>
-        /// <param name="elementType"></param>
-        /// <returns></returns>
-        private static IEnumerable<string> GetProperties(Type elementType)
-        {
-            return elementType.GetProperties().Select(p => p.Name);
-        }
+        //private static DataTable Convert2Datatable(IQueryable query)
+        //{
+        //    if (query != null)
+        //    {
+        //        DataTable dt = new(query.ElementType.Name);
+        //        var columns = GetProperties(query.ElementType);
+        //        dt.Columns.AddRange(ToDataColumn(columns));
+        //        foreach (var item in query)
+        //        {
+        //            var row = new List<string>();
+        //            //DataRow row2 = dt.NewRow();
+        //            foreach (var column in columns)
+        //            {
+        //                var value = GetValue(item, column);
+        //                row.Add(value != null ? value.ToString() : "null");
+        //            }
+        //            dt.Rows.Add(row.ToArray());
+        //        }
+        //        return dt;
+        //    }
+        //    return new DataTable("NotFound");
+        //}
 
-        #endregion Private Methods
+        //private static DataColumn[] ToDataColumn(IEnumerable<string> columns)
+        //{
+        //    var dataCol = new List<DataColumn>();
+        //    foreach (var column in columns)
+        //        dataCol.Add(new DataColumn(column));
+        //    return dataCol.ToArray();
+        //}
+
+        //private static object GetValue(object item, string column)
+        //{
+        //    return item.GetType()?.GetProperty(column)?.GetValue(item) ?? "Null";
+        //}
+
+        ///// <summary>
+        ///// Get fileds name
+        ///// </summary>
+        ///// <param name="elementType"></param>
+        ///// <returns></returns>
+        //private static IEnumerable<string> GetProperties(Type elementType)
+        //{
+        //    return elementType.GetProperties().Select(p => p.Name);
+        //}
+
+        //#endregion Private Methods
     }
 }
