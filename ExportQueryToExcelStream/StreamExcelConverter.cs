@@ -16,7 +16,7 @@ namespace ExportQueryToExcelStream {
             var talbe = Convert2Datatable(_queryable);
             using XLWorkbook wb = new();
             wb.Worksheets.Add(talbe);
-            //Không cần sử dụng "using(MemoryStream stream = new())"
+
             MemoryStream stream = new();
             wb.SaveAs(stream);
             stream.Position = 0;
